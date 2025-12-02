@@ -5,11 +5,14 @@ import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
 import 'package:union_shop/pages/about_us_page.dart';
 import 'package:union_shop/pages/collections_page.dart';
+import 'package:union_shop/pages/collection_detail_page.dart';
 import 'package:union_shop/pages/sale_collection_page.dart';
 import 'package:union_shop/pages/login_page.dart';
 import 'package:union_shop/pages/signup_page.dart';
 import 'package:union_shop/pages/cart_page.dart';
 import 'package:union_shop/services/cart_provider.dart';
+import 'package:union_shop/services/product_service.dart';
+import 'package:union_shop/models/product.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -53,6 +56,12 @@ class UnionShopApp extends StatelessWidget {
               final productId = args?['productId'] as String?;
               return MaterialPageRoute(
                 builder: (context) => ProductPage(productId: productId),
+              );
+            case '/collection':
+              final args = settings.arguments as Map<String, dynamic>?;
+              final collectionId = args?['collectionId'] as String? ?? 'apparel';
+              return MaterialPageRoute(
+                builder: (context) => CollectionDetailPage(collectionId: collectionId),
               );
             default:
               return MaterialPageRoute(builder: (context) => const HomeScreen());
@@ -183,32 +192,9 @@ class HomeScreen extends StatelessWidget {
                           MediaQuery.of(context).size.width > 600 ? 2 : 1,
                       crossAxisSpacing: 24,
                       mainAxisSpacing: 48,
-                      children: const [
-                        ProductCard(
-                          title: 'Placeholder Product 1',
-                          price: '£10.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 2',
-                          price: '£15.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 3',
-                          price: '£20.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 4',
-                          price: '£25.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                      ],
+                      children: ProductService.getFeaturedProducts().take(4).map((product) => 
+                        HomeProductCard(product: product),
+                      ).toList(),
                     ),
                   ],
                 ),
@@ -280,3 +266,130 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
+class HomeProductCard extends StatelessWidget {
+  final Product product;
+
+  const HomeProductCard({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context, 
+          '/product',
+          arguments: {'productId': product.id},
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      product.imageUrl,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Icon(Icons.image_not_supported, color: Colors.grey),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  if (product.isOnSale)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          'SALE',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              Text(
+                product.title,
+                style: const TextStyle(
+                  fontSize: 14, 
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  if (product.originalPrice != null && product.originalPrice! > product.price) ...[
+                    Text(
+                      '£${product.originalPrice!.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  Text(
+                    product.formattedPrice,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: product.isOnSale ? Colors.red : const Color(0xFF4d2963),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4d2963).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  product.category,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Color(0xFF4d2963),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }

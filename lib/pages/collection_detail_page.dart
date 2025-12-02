@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
+import 'package:union_shop/services/product_service.dart';
+import 'package:union_shop/services/cart_provider.dart';
+import 'package:union_shop/models/product.dart';
 
 class CollectionDetailPage extends StatefulWidget {
   final String collectionId;
@@ -15,100 +19,75 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
   String selectedSort = 'Featured';
   String selectedPriceFilter = 'All';
   String selectedCategory = 'All';
+  late Map<String, dynamic> collectionInfo;
+  List<Product> products = [];
+  List<Product> filteredProducts = [];
 
-  // Sample products for different collections
-  Map<String, List<Map<String, dynamic>>> collectionProducts = {
-    'apparel': [
-      {
-        'title': 'Classic Portsmouth Hoodie',
-        'price': '£35.00',
-        'originalPrice': null,
-        'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': false,
-      },
-      {
-        'title': 'University T-Shirt',
-        'price': '£18.00',
-        'originalPrice': null,
-        'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': false,
-      },
-      {
-        'title': 'Portsmouth Baseball Cap',
-        'price': '£15.00',
-        'originalPrice': '£20.00',
-        'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': true,
-      },
-      {
-        'title': 'University Sweatshirt',
-        'price': '£28.00',
-        'originalPrice': null,
-        'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': false,
-      },
-    ],
-    'stationery': [
-      {
-        'title': 'Portsmouth Notebook Set',
-        'price': '£12.00',
-        'originalPrice': null,
-        'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': false,
-      },
-      {
-        'title': 'University Pen Collection',
-        'price': '£8.00',
-        'originalPrice': null,
-        'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': false,
-      },
-    ]
-  };
-
-  String getCollectionTitle() {
-    switch (widget.collectionId) {
-      case 'apparel':
-        return 'University Apparel';
-      case 'stationery':
-        return 'Stationery & Books';
-      case 'gifts':
-        return 'Gifts & Souvenirs';
-      case 'sale':
-        return 'Sale Items';
-      case 'autumn':
-        return 'Autumn Favourites';
-      case 'new':
-        return 'New Arrivals';
-      default:
-        return 'Collection';
-    }
+  @override
+  void initState() {
+    super.initState();
+    _loadCollectionData();
   }
 
-  List<Map<String, dynamic>> getProducts() {
-    return collectionProducts[widget.collectionId] ??
-        [
-          {
-            'title': 'Sample Product',
-            'price': '£10.00',
-            'originalPrice': null,
-            'imageUrl':
-                'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-            'isOnSale': false,
-          },
-        ];
+  void _loadCollectionData() {
+    collectionInfo = ProductService.getCollectionInfo(widget.collectionId);
+    products = collectionInfo['products'] as List<Product>;
+    _applyFiltersAndSort();
+  }
+
+  void _applyFiltersAndSort() {
+    filteredProducts = List<Product>.from(products);
+
+    // Apply price filter
+    switch (selectedPriceFilter) {
+      case 'Under £10':
+        filteredProducts = filteredProducts.where((p) => p.price < 10).toList();
+        break;
+      case '£10 - £25':
+        filteredProducts = filteredProducts.where((p) => p.price >= 10 && p.price <= 25).toList();
+        break;
+      case '£25 - £50':
+        filteredProducts = filteredProducts.where((p) => p.price >= 25 && p.price <= 50).toList();
+        break;
+      case 'Over £50':
+        filteredProducts = filteredProducts.where((p) => p.price > 50).toList();
+        break;
+    }
+
+    // Apply category filter
+    if (selectedCategory != 'All') {
+      filteredProducts = filteredProducts.where((p) => p.category == selectedCategory).toList();
+    }
+
+    // Apply sorting
+    filteredProducts = ProductService.sortProducts(filteredProducts, selectedSort);
+
+    setState(() {});
+  }
+
+  void _addToCart(Product product) {
+    context.read<CartProvider>().addToCart(product);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Added ${product.title} to cart'),
+        backgroundColor: const Color(0xFF4d2963),
+        action: SnackBarAction(
+          label: 'View Cart',
+          textColor: Colors.white,
+          onPressed: () => Navigator.pushNamed(context, '/cart'),
+        ),
+      ),
+    );
+  }
+
+  List<String> get availableCategories {
+    final categories = ['All'];
+    categories.addAll(products.map((p) => p.category).toSet().toList()..sort());
+    return categories;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> products = getProducts();
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -150,7 +129,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                       ),
                       const Text(' > ', style: TextStyle(color: Colors.grey)),
                       Text(
-                        getCollectionTitle(),
+                        collectionInfo['name'] as String,
                         style: const TextStyle(
                           fontSize: 14,
                           color: Color(0xFF4d2963),
@@ -161,9 +140,9 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Collection title
+                  // Collection title and description
                   Text(
-                    getCollectionTitle(),
+                    collectionInfo['name'] as String,
                     style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -172,9 +151,17 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${products.length} products',
+                    collectionInfo['description'] as String,
                     style: const TextStyle(
                       fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${filteredProducts.length} of ${products.length} products',
+                    style: const TextStyle(
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                   ),
@@ -211,6 +198,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                               setState(() {
                                 selectedSort = newValue!;
                               });
+                              _applyFiltersAndSort();
                             },
                           ),
                         ),
@@ -243,6 +231,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                               setState(() {
                                 selectedPriceFilter = newValue!;
                               });
+                              _applyFiltersAndSort();
                             },
                           ),
                         ),
@@ -259,13 +248,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: selectedCategory,
-                            items: [
-                              'All',
-                              'Clothing',
-                              'Accessories',
-                              'Books',
-                              'Gifts'
-                            ].map((String value) {
+                            items: availableCategories.map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -275,6 +258,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                               setState(() {
                                 selectedCategory = newValue!;
                               });
+                              _applyFiltersAndSort();
                             },
                           ),
                         ),
@@ -289,48 +273,27 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(24),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      MediaQuery.of(context).size.width > 600 ? 3 : 2,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 24,
-                ),
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ProductCard(
-                    title: product['title'],
-                    price: product['price'],
-                    originalPrice: product['originalPrice'],
-                    imageUrl: product['imageUrl'],
-                    isOnSale: product['isOnSale'],
-                  );
-                },
-              ),
-            ),
-
-            // Pagination (static)
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildPaginationButton('Previous', false),
-                  const SizedBox(width: 12),
-                  _buildPaginationButton('1', true),
-                  const SizedBox(width: 8),
-                  _buildPaginationButton('2', false),
-                  const SizedBox(width: 8),
-                  _buildPaginationButton('3', false),
-                  const SizedBox(width: 12),
-                  _buildPaginationButton('Next', false),
-                ],
-              ),
+              child: filteredProducts.isEmpty 
+                ? _buildEmptyState()
+                : GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                      childAspectRatio: 0.7,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 24,
+                    ),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      return DynamicProductCard(
+                        product: product,
+                        onAddToCart: () => _addToCart(product),
+                      );
+                    },
+                  ),
             ),
 
             // Footer
@@ -341,48 +304,75 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
     );
   }
 
-  Widget _buildPaginationButton(String text, bool isActive) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF4d2963) : Colors.white,
-        border: Border.all(
-          color: isActive ? const Color(0xFF4d2963) : Colors.grey[300]!,
-        ),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: isActive ? Colors.white : Colors.black,
-          fontSize: 14,
+  Widget _buildEmptyState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(48),
+        child: Column(
+          children: [
+            Icon(
+              Icons.search_off,
+              size: 64,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'No products found',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Try adjusting your filters to see more products',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  selectedPriceFilter = 'All';
+                  selectedCategory = 'All';
+                });
+                _applyFiltersAndSort();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4d2963),
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Clear Filters'),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class ProductCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String? originalPrice;
-  final String imageUrl;
-  final bool isOnSale;
+class DynamicProductCard extends StatelessWidget {
+  final Product product;
+  final VoidCallback onAddToCart;
 
-  const ProductCard({
-    super.key,
-    required this.title,
-    required this.price,
-    this.originalPrice,
-    required this.imageUrl,
-    this.isOnSale = false,
+  const DynamicProductCard({
+    super.key, 
+    required this.product,
+    required this.onAddToCart,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.pushNamed(
+          context, 
+          '/product',
+          arguments: {'productId': product.id},
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -415,7 +405,7 @@ class ProductCard extends StatelessWidget {
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(8)),
                       child: Image.network(
-                        imageUrl,
+                        product.imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
@@ -433,7 +423,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   // Sale badge
-                  if (isOnSale)
+                  if (product.isOnSale)
                     Positioned(
                       top: 8,
                       left: 8,
@@ -454,6 +444,30 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                  // Quick add to cart button
+                  Positioned(
+                    bottom: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4d2963),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ),
+                        onPressed: product.stockQuantity > 0 ? onAddToCart : null,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -466,7 +480,7 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      product.title,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -475,31 +489,55 @@ class ProductCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4d2963).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        product.category,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Color(0xFF4d2963),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
                     Row(
                       children: [
-                        Text(
-                          price,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                isOnSale ? Colors.red : const Color(0xFF4d2963),
-                          ),
-                        ),
-                        if (originalPrice != null) ...[
-                          const SizedBox(width: 8),
+                        if (product.originalPrice != null && product.originalPrice! > product.price) ...[
                           Text(
-                            originalPrice!,
+                            '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
+                          const SizedBox(width: 4),
                         ],
+                        Text(
+                          product.formattedPrice,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: product.isOnSale ? Colors.red : const Color(0xFF4d2963),
+                          ),
+                        ),
                       ],
                     ),
+                    if (product.stockQuantity <= 0)
+                      const Text(
+                        'Out of Stock',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                   ],
                 ),
               ),

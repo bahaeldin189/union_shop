@@ -136,7 +136,11 @@ class CollectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/collection/$collectionId');
+        Navigator.pushNamed(
+          context, 
+          '/collection',
+          arguments: {'collectionId': collectionId},
+        );
       },
       child: Container(
         decoration: BoxDecoration(
