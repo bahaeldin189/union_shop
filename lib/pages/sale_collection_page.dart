@@ -14,7 +14,7 @@ class SaleCollectionPage extends StatelessWidget {
         'price': '£15.00',
         'originalPrice': '£20.00',
         'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80',
         'discount': '25% OFF',
       },
       {
@@ -22,7 +22,7 @@ class SaleCollectionPage extends StatelessWidget {
         'price': '£8.00',
         'originalPrice': '£12.00',
         'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?w=800&q=80',
         'discount': '33% OFF',
       },
       {
@@ -30,7 +30,7 @@ class SaleCollectionPage extends StatelessWidget {
         'price': '£10.00',
         'originalPrice': '£16.00',
         'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',
         'discount': '37% OFF',
       },
       {
@@ -38,7 +38,7 @@ class SaleCollectionPage extends StatelessWidget {
         'price': '£3.00',
         'originalPrice': '£5.00',
         'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
         'discount': '40% OFF',
       },
       {
@@ -46,7 +46,7 @@ class SaleCollectionPage extends StatelessWidget {
         'price': '£6.00',
         'originalPrice': '£9.00',
         'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&q=80',
         'discount': '33% OFF',
       },
       {
@@ -54,7 +54,7 @@ class SaleCollectionPage extends StatelessWidget {
         'price': '£7.00',
         'originalPrice': '£11.00',
         'imageUrl':
-            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80',
         'discount': '36% OFF',
       },
     ];
@@ -189,11 +189,15 @@ class SaleCollectionPage extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 600 ? 3 : 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 24,
+                      crossAxisCount: MediaQuery.of(context).size.width > 1200
+                          ? 4
+                          : MediaQuery.of(context).size.width > 600
+                              ? 3
+                              : 2,
+                      childAspectRatio:
+                          MediaQuery.of(context).size.width > 800 ? 0.45 : 0.55,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 16,
                     ),
                     itemCount: saleProducts.length,
                     itemBuilder: (context, index) {
@@ -303,8 +307,8 @@ class SaleProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product image
-            Expanded(
-              flex: 3,
+            Flexible(
+              flex: 2,
               child: Stack(
                 children: [
                   Container(
@@ -325,7 +329,7 @@ class SaleProductCard extends StatelessWidget {
                             child: const Center(
                               child: Icon(
                                 Icons.image_not_supported,
-                                size: 40,
+                                size: 32,
                                 color: Colors.grey,
                               ),
                             ),
@@ -336,20 +340,20 @@ class SaleProductCard extends StatelessWidget {
                   ),
                   // Discount badge
                   Positioned(
-                    top: 8,
-                    left: 8,
+                    top: 6,
+                    left: 6,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 6, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.red,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(3),
                       ),
                       child: Text(
                         discount,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 11,
+                          fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -357,11 +361,11 @@ class SaleProductCard extends StatelessWidget {
                   ),
                   // Sale badge
                   Positioned(
-                    top: 8,
-                    right: 8,
+                    top: 6,
+                    right: 6,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 3),
+                          horizontal: 4, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.orange,
                         borderRadius: BorderRadius.circular(3),
@@ -370,7 +374,7 @@ class SaleProductCard extends StatelessWidget {
                         'SALE',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 10,
+                          fontSize: 9,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -380,58 +384,59 @@ class SaleProductCard extends StatelessWidget {
               ),
             ),
             // Product details
-            Expanded(
-              flex: 2,
+            Flexible(
+              flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 3),
                     Row(
                       children: [
                         Text(
                           price,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 13,
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 3),
                         Text(
                           originalPrice,
                           style: const TextStyle(
-                            fontSize: 13,
+                            fontSize: 10,
                             color: Colors.grey,
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         Icon(
                           Icons.local_offer,
-                          size: 14,
+                          size: 11,
                           color: Colors.orange[600],
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 2),
                         Text(
                           'Limited time',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 9,
                             color: Colors.orange[600],
                             fontWeight: FontWeight.w500,
                           ),

@@ -109,8 +109,7 @@ class ProductService {
       description:
           'Ceramic mug with Portsmouth University logo. Dishwasher and microwave safe.',
       price: 10.00,
-      imageUrl:
-          ProductImageService.getImageForProduct('University Mug', 'Gifts'),
+      imageUrl: 'https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?w=800&q=80',
       category: 'Gifts',
       collection: 'gifts',
       colors: ['White', 'Navy', 'Grey'],
@@ -154,8 +153,7 @@ class ProductService {
       description:
           'Warm woolen scarf in university colors. Perfect for the autumn season.',
       price: 22.00,
-      imageUrl:
-          ProductImageService.getImageForProduct('Autumn Scarf', 'Accessories'),
+      imageUrl: 'https://images.unsplash.com/photo-1601762603332-db5e4b2cca8b?w=800&q=80',
       category: 'Accessories',
       collection: 'autumn',
       colors: ['Navy', 'Burgundy', 'Forest Green'],

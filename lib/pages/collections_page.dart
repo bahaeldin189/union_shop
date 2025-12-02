@@ -41,9 +41,20 @@ class CollectionsPage extends StatelessWidget {
                   // Collections grid with responsive layout
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
-                      final aspectRatio =
-                          constraints.maxWidth > 600 ? 1.2 : 0.9;
+                      int crossAxisCount = 1;
+                      double aspectRatio = 0.9;
+                      if (constraints.maxWidth > 1200) {
+                        crossAxisCount = 3;
+                        aspectRatio = 1.0;
+                      } else if (constraints.maxWidth > 800) {
+                        crossAxisCount = 2;
+                        aspectRatio = 1.1;
+                      } else if (constraints.maxWidth > 600) {
+                        crossAxisCount = 2;
+                        aspectRatio = 1.2;
+                      } else {
+                        aspectRatio = 1.4;
+                      }
                       final collections = ProductService.getCollections();
 
                       return GridView.count(
@@ -95,9 +106,12 @@ class CollectionsPage extends StatelessWidget {
                     builder: (context, constraints) {
                       int crossAxisCount = 1;
                       double aspectRatio = 1.0;
-                      if (constraints.maxWidth > 800) {
+                      if (constraints.maxWidth > 1200) {
+                        crossAxisCount = 4;
+                        aspectRatio = 0.8;
+                      } else if (constraints.maxWidth > 800) {
                         crossAxisCount = 3;
-                        aspectRatio = 1.1;
+                        aspectRatio = 0.9;
                       } else if (constraints.maxWidth > 600) {
                         crossAxisCount = 2;
                         aspectRatio = 1.0;
@@ -237,7 +251,7 @@ class CollectionCard extends StatelessWidget {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -245,7 +259,7 @@ class CollectionCard extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF4d2963),
                       ),
@@ -256,17 +270,17 @@ class CollectionCard extends StatelessWidget {
                     Text(
                       description,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.grey[600],
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 3),
                     Text(
                       itemCount,
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 10,
                         color: Color(0xFF4d2963),
                         fontWeight: FontWeight.w600,
                       ),
@@ -370,7 +384,7 @@ class ProductCardWidget extends StatelessWidget {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -378,13 +392,13 @@ class ProductCardWidget extends StatelessWidget {
                     Text(
                       product.title,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 3),
                     Row(
                       children: [
                         if (product.originalPrice != null &&
@@ -392,17 +406,17 @@ class ProductCardWidget extends StatelessWidget {
                           Text(
                             '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 9,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
-                          const SizedBox(width: 4),
+                          const SizedBox(width: 3),
                         ],
                         Text(
                           product.formattedPrice,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: product.isOnSale
                                 ? Colors.red

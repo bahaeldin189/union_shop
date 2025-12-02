@@ -113,9 +113,9 @@ class AboutUsPage extends StatelessWidget {
                     crossAxisCount:
                         MediaQuery.of(context).size.width > 600 ? 2 : 1,
                     childAspectRatio:
-                        MediaQuery.of(context).size.width > 600 ? 3 : 4,
+                        MediaQuery.of(context).size.width > 600 ? 2.2 : 2.2,
                     crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
+                    mainAxisSpacing: 0.0,
                     children: const [
                       _ServiceCard(
                         icon: Icons.school_outlined,
@@ -237,7 +237,7 @@ class _ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -245,6 +245,7 @@ class _ServiceCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             icon,
@@ -261,15 +262,15 @@ class _ServiceCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Expanded(
-            child: Text(
-              description,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-                height: 1.4,
-              ),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+              height: 1.2,
             ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

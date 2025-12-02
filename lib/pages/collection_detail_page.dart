@@ -287,10 +287,15 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount:
-                            MediaQuery.of(context).size.width > 600 ? 3 : 2,
-                        childAspectRatio: 0.55,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 16,
+                            MediaQuery.of(context).size.width > 600 ? 4 : 2,
+                        childAspectRatio:
+                            MediaQuery.of(context).size.width > 600
+                                ? 0.6
+                                : 0.55,
+                        crossAxisSpacing:
+                            MediaQuery.of(context).size.width > 600 ? 16 : 12,
+                        mainAxisSpacing:
+                            MediaQuery.of(context).size.width > 600 ? 20 : 16,
                       ),
                       itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
@@ -483,7 +488,7 @@ class DynamicProductCard extends StatelessWidget {
             Flexible(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -491,7 +496,7 @@ class DynamicProductCard extends StatelessWidget {
                     Text(
                       product.title,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
@@ -501,15 +506,15 @@ class DynamicProductCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 1),
+                          horizontal: 5, vertical: 1),
                       decoration: BoxDecoration(
                         color: const Color(0xFF4d2963).withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         product.category,
                         style: const TextStyle(
-                          fontSize: 9,
+                          fontSize: 8,
                           color: Color(0xFF4d2963),
                           fontWeight: FontWeight.w600,
                         ),
@@ -523,7 +528,7 @@ class DynamicProductCard extends StatelessWidget {
                           Text(
                             '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 9,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
                             ),
@@ -533,7 +538,7 @@ class DynamicProductCard extends StatelessWidget {
                         Text(
                           product.formattedPrice,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: product.isOnSale
                                 ? Colors.red
@@ -546,7 +551,7 @@ class DynamicProductCard extends StatelessWidget {
                       const Text(
                         'Out of Stock',
                         style: TextStyle(
-                          fontSize: 9,
+                          fontSize: 8,
                           color: Colors.red,
                           fontWeight: FontWeight.w500,
                         ),
