@@ -42,7 +42,7 @@ class _SignupPageState extends State<SignupPage> {
         );
         return;
       }
-      
+
       // Placeholder for signup functionality
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -122,7 +122,6 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                           ),
                           const SizedBox(height: 32),
-
                           Form(
                             key: _formKey,
                             child: Column(
@@ -137,7 +136,8 @@ class _SignupPageState extends State<SignupPage> {
                                           labelText: 'First Name',
                                           hintText: 'Enter your first name',
                                           border: OutlineInputBorder(),
-                                          prefixIcon: Icon(Icons.person_outline),
+                                          prefixIcon:
+                                              Icon(Icons.person_outline),
                                         ),
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
@@ -207,7 +207,8 @@ class _SignupPageState extends State<SignupPage> {
                                       ),
                                       onPressed: () {
                                         setState(() {
-                                          _isPasswordVisible = !_isPasswordVisible;
+                                          _isPasswordVisible =
+                                              !_isPasswordVisible;
                                         });
                                       },
                                     ),
@@ -241,7 +242,8 @@ class _SignupPageState extends State<SignupPage> {
                                       ),
                                       onPressed: () {
                                         setState(() {
-                                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                                          _isConfirmPasswordVisible =
+                                              !_isConfirmPasswordVisible;
                                         });
                                       },
                                     ),
@@ -293,7 +295,8 @@ class _SignupPageState extends State<SignupPage> {
                                           value: _subscribeNewsletter,
                                           onChanged: (value) {
                                             setState(() {
-                                              _subscribeNewsletter = value ?? false;
+                                              _subscribeNewsletter =
+                                                  value ?? false;
                                             });
                                           },
                                           activeColor: const Color(0xFF4d2963),

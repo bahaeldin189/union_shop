@@ -7,7 +7,7 @@ void main() {
     testWidgets('should display home page with basic elements', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
-      
+
       // Wait for any async operations and network images to settle
       await tester.pumpAndSettle();
 
@@ -24,7 +24,7 @@ void main() {
     testWidgets('should display product cards', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
-      
+
       // Wait for any async operations and network images to settle
       await tester.pumpAndSettle();
 
@@ -44,7 +44,7 @@ void main() {
     testWidgets('should display header icons', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
-      
+
       // Wait for any async operations and network images to settle
       await tester.pumpAndSettle();
 
@@ -57,12 +57,13 @@ void main() {
     testWidgets('should display footer', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
-      
+
       // Wait for any async operations and network images to settle
       await tester.pumpAndSettle();
 
       // Check that footer is present
-      expect(find.text('© 2025 University of Portsmouth Students\' Union'), findsOneWidget);
+      expect(find.text('© 2025 University of Portsmouth Students\' Union'),
+          findsOneWidget);
     });
   });
 }

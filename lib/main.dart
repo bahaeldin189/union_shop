@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
 import 'package:union_shop/pages/about_us_page.dart';
 import 'package:union_shop/pages/collections_page.dart';
-import 'package:union_shop/pages/collection_detail_page.dart';
 import 'package:union_shop/pages/sale_collection_page.dart';
 import 'package:union_shop/pages/login_page.dart';
 import 'package:union_shop/pages/signup_page.dart';
+import 'package:union_shop/pages/cart_page.dart';
+import 'package:union_shop/services/cart_provider.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -18,29 +20,45 @@ class UnionShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Union Shop',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4d2963)),
+    return ChangeNotifierProvider(
+      create: (context) => CartProvider(),
+      child: MaterialApp(
+        title: 'Union Shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4d2963)),
+        ),
+        home: const HomeScreen(),
+        // By default, the app starts at the '/' route, which is the HomeScreen
+        initialRoute: '/',
+        // Define all routes for navigation
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case '/':
+              return MaterialPageRoute(builder: (context) => const HomeScreen());
+            case '/about':
+              return MaterialPageRoute(builder: (context) => const AboutUsPage());
+            case '/collections':
+              return MaterialPageRoute(builder: (context) => const CollectionsPage());
+            case '/login':
+              return MaterialPageRoute(builder: (context) => const LoginPage());
+            case '/signup':
+              return MaterialPageRoute(builder: (context) => const SignupPage());
+            case '/cart':
+              return MaterialPageRoute(builder: (context) => const CartPage());
+            case '/sale':
+              return MaterialPageRoute(builder: (context) => const SaleCollectionPage());
+            case '/product':
+              final args = settings.arguments as Map<String, dynamic>?;
+              final productId = args?['productId'] as String?;
+              return MaterialPageRoute(
+                builder: (context) => ProductPage(productId: productId),
+              );
+            default:
+              return MaterialPageRoute(builder: (context) => const HomeScreen());
+          }
+        },
       ),
-      home: const HomeScreen(),
-      // By default, the app starts at the '/' route, which is the HomeScreen
-      initialRoute: '/',
-      // Define all routes for navigation
-      routes: {
-        '/product': (context) => const ProductPage(),
-        '/about': (context) => const AboutUsPage(),
-        '/collections': (context) => const CollectionsPage(),
-        '/login': (context) => const LoginPage(),
-        '/signup': (context) => const SignupPage(),
-        '/cart': (context) => const Scaffold(
-              body: Center(
-                child: Text('Shopping Cart - Coming Soon'),
-              ),
-            ),
-        '/sale': (context) => const SaleCollectionPage(),
-      },
     );
   }
 }

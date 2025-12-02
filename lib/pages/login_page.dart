@@ -265,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text('Don\\'t have an account? '),
+                                    const Text("Don't have an account? "),
                                     TextButton(
                                       onPressed: _navigateToSignup,
                                       child: const Text(

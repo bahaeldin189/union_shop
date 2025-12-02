@@ -172,7 +172,7 @@ class Footer extends StatelessWidget {
             const Divider(color: Colors.grey),
             const SizedBox(height: 12),
           ],
-          
+
           // Footer bottom
           Row(
             children: [

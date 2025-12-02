@@ -4,7 +4,7 @@ import 'package:union_shop/widgets/footer.dart';
 
 class CollectionDetailPage extends StatefulWidget {
   final String collectionId;
-  
+
   const CollectionDetailPage({super.key, required this.collectionId});
 
   @override
@@ -23,28 +23,32 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         'title': 'Classic Portsmouth Hoodie',
         'price': '£35.00',
         'originalPrice': null,
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+        'imageUrl':
+            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
         'isOnSale': false,
       },
       {
         'title': 'University T-Shirt',
         'price': '£18.00',
         'originalPrice': null,
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+        'imageUrl':
+            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
         'isOnSale': false,
       },
       {
         'title': 'Portsmouth Baseball Cap',
         'price': '£15.00',
         'originalPrice': '£20.00',
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+        'imageUrl':
+            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
         'isOnSale': true,
       },
       {
         'title': 'University Sweatshirt',
         'price': '£28.00',
         'originalPrice': null,
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+        'imageUrl':
+            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
         'isOnSale': false,
       },
     ],
@@ -53,14 +57,16 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         'title': 'Portsmouth Notebook Set',
         'price': '£12.00',
         'originalPrice': null,
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+        'imageUrl':
+            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
         'isOnSale': false,
       },
       {
         'title': 'University Pen Collection',
         'price': '£8.00',
         'originalPrice': null,
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+        'imageUrl':
+            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
         'isOnSale': false,
       },
     ]
@@ -86,21 +92,23 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
   }
 
   List<Map<String, dynamic>> getProducts() {
-    return collectionProducts[widget.collectionId] ?? [
-      {
-        'title': 'Sample Product',
-        'price': '£10.00',
-        'originalPrice': null,
-        'imageUrl': 'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-        'isOnSale': false,
-      },
-    ];
+    return collectionProducts[widget.collectionId] ??
+        [
+          {
+            'title': 'Sample Product',
+            'price': '£10.00',
+            'originalPrice': null,
+            'imageUrl':
+                'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+            'isOnSale': false,
+          },
+        ];
   }
 
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> products = getProducts();
-    
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -130,7 +138,8 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                       ),
                       const Text(' > ', style: TextStyle(color: Colors.grey)),
                       GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/collections'),
+                        onTap: () =>
+                            Navigator.pushNamed(context, '/collections'),
                         child: const Text(
                           'Collections',
                           style: TextStyle(
@@ -178,7 +187,8 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                     children: [
                       // Sort dropdown
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
                           borderRadius: BorderRadius.circular(4),
@@ -186,8 +196,12 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: selectedSort,
-                            items: ['Featured', 'Price: Low to High', 'Price: High to Low', 'Newest']
-                                .map((String value) {
+                            items: [
+                              'Featured',
+                              'Price: Low to High',
+                              'Price: High to Low',
+                              'Newest'
+                            ].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -204,7 +218,8 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
 
                       // Price filter
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
                           borderRadius: BorderRadius.circular(4),
@@ -212,8 +227,13 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: selectedPriceFilter,
-                            items: ['All', 'Under £10', '£10 - £25', '£25 - £50', 'Over £50']
-                                .map((String value) {
+                            items: [
+                              'All',
+                              'Under £10',
+                              '£10 - £25',
+                              '£25 - £50',
+                              'Over £50'
+                            ].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -228,9 +248,10 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                         ),
                       ),
 
-                      // Category filter  
+                      // Category filter
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
                           borderRadius: BorderRadius.circular(4),
@@ -238,8 +259,13 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: selectedCategory,
-                            items: ['All', 'Clothing', 'Accessories', 'Books', 'Gifts']
-                                .map((String value) {
+                            items: [
+                              'All',
+                              'Clothing',
+                              'Accessories',
+                              'Books',
+                              'Gifts'
+                            ].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -267,7 +293,8 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                  crossAxisCount:
+                      MediaQuery.of(context).size.width > 600 ? 3 : 2,
                   childAspectRatio: 0.7,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 24,
@@ -381,10 +408,12 @@ class ProductCard extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(8)),
                     ),
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(8)),
                       child: Image.network(
                         imageUrl,
                         fit: BoxFit.cover,
@@ -409,7 +438,8 @@ class ProductCard extends StatelessWidget {
                       top: 8,
                       left: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 3),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(3),
@@ -453,7 +483,8 @@ class ProductCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: isOnSale ? Colors.red : const Color(0xFF4d2963),
+                            color:
+                                isOnSale ? Colors.red : const Color(0xFF4d2963),
                           ),
                         ),
                         if (originalPrice != null) ...[

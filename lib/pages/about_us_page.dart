@@ -110,30 +110,36 @@ class AboutUsPage extends StatelessWidget {
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: MediaQuery.of(context).size.width > 600 ? 2 : 1,
-                    childAspectRatio: MediaQuery.of(context).size.width > 600 ? 3 : 4,
+                    crossAxisCount:
+                        MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                    childAspectRatio:
+                        MediaQuery.of(context).size.width > 600 ? 3 : 4,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                     children: const [
                       _ServiceCard(
                         icon: Icons.school_outlined,
                         title: 'University Merchandise',
-                        description: 'Official Portsmouth branded clothing, accessories, and gifts',
+                        description:
+                            'Official Portsmouth branded clothing, accessories, and gifts',
                       ),
                       _ServiceCard(
                         icon: Icons.menu_book_outlined,
                         title: 'Textbooks & Stationery',
-                        description: 'Academic materials, notebooks, and study essentials',
+                        description:
+                            'Academic materials, notebooks, and study essentials',
                       ),
                       _ServiceCard(
                         icon: Icons.palette_outlined,
                         title: 'Custom Printing',
-                        description: 'Personalized items and custom text printing services',
+                        description:
+                            'Personalized items and custom text printing services',
                       ),
                       _ServiceCard(
                         icon: Icons.card_giftcard_outlined,
                         title: 'Gifts & Souvenirs',
-                        description: 'Perfect presents for students, graduates, and visitors',
+                        description:
+                            'Perfect presents for students, graduates, and visitors',
                       ),
                     ],
                   ),
@@ -161,12 +167,14 @@ class AboutUsPage extends StatelessWidget {
                         const SizedBox(height: 16),
                         const Row(
                           children: [
-                            Icon(Icons.location_on_outlined, color: Color(0xFF4d2963)),
+                            Icon(Icons.location_on_outlined,
+                                color: Color(0xFF4d2963)),
                             SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 'University House, Winston Churchill Avenue, Portsmouth PO1 2UP',
-                                style: TextStyle(fontSize: 16, color: Colors.black87),
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black87),
                               ),
                             ),
                           ],
@@ -174,22 +182,26 @@ class AboutUsPage extends StatelessWidget {
                         const SizedBox(height: 12),
                         const Row(
                           children: [
-                            Icon(Icons.phone_outlined, color: Color(0xFF4d2963)),
+                            Icon(Icons.phone_outlined,
+                                color: Color(0xFF4d2963)),
                             SizedBox(width: 12),
                             Text(
                               '023 9284 3962',
-                              style: TextStyle(fontSize: 16, color: Colors.black87),
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black87),
                             ),
                           ],
                         ),
                         const SizedBox(height: 12),
                         const Row(
                           children: [
-                            Icon(Icons.email_outlined, color: Color(0xFF4d2963)),
+                            Icon(Icons.email_outlined,
+                                color: Color(0xFF4d2963)),
                             SizedBox(width: 12),
                             Text(
                               'shop@upsu.net',
-                              style: TextStyle(fontSize: 16, color: Colors.black87),
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black87),
                             ),
                           ],
                         ),

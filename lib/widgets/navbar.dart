@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/cart_provider.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -112,19 +114,52 @@ class NavBar extends StatelessWidget {
                           ),
                           onPressed: () => navigateToLogin(context),
                         ),
-                        // Cart icon
-                        IconButton(
-                          icon: const Icon(
-                            Icons.shopping_bag_outlined,
-                            size: 18,
-                            color: Colors.grey,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(
-                            minWidth: 32,
-                            minHeight: 32,
-                          ),
-                          onPressed: () => navigateToCart(context),
+                        // Cart icon with badge
+                        Consumer<CartProvider>(
+                          builder: (context, cartProvider, child) {
+                            return Stack(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.shopping_bag_outlined,
+                                    size: 18,
+                                    color: Colors.grey,
+                                  ),
+                                  padding: const EdgeInsets.all(8),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  onPressed: () => navigateToCart(context),
+                                ),
+                                if (cartProvider.itemCount > 0)
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF4d2963),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 16,
+                                        minHeight: 16,
+                                      ),
+                                      child: Text(
+                                        '${cartProvider.itemCount}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
                         ),
                         // Menu icon
                         IconButton(
@@ -239,6 +274,28 @@ class NavBar extends StatelessWidget {
                 Navigator.pop(context);
                 navigateToCart(context);
               },
+              Consumer<CartProvider>(
+                builder: (context, cartProvider, child) {
+                  return cartProvider.itemCount > 0
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF4d2963),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${cartProvider.itemCount}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink();
+                },
+              ),
             ),
             const SizedBox(height: 20),
           ],
@@ -251,8 +308,9 @@ class NavBar extends StatelessWidget {
     BuildContext context,
     String title,
     IconData icon,
-    VoidCallback onTap,
-  ) {
+    VoidCallback onTap, [
+    Widget? trailing,
+  ]) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -274,6 +332,10 @@ class NavBar extends StatelessWidget {
               ),
             ),
             const Spacer(),
+            if (trailing != null) ...[
+              trailing,
+              const SizedBox(width: 8),
+            ],
             const Icon(
               Icons.arrow_forward_ios,
               color: Colors.grey,
