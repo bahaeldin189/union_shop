@@ -10,11 +10,16 @@ This is a Flutter e-commerce application recreating the University of Portsmouth
 
 ## ✅ Completed Features
 
-### Basic Features (40% of functionality marks)
+### Basic Features (40% of functionality marks) - ALL COMPLETED ✅
 - [x] **Static Homepage** (5%) - Homepage layout with hardcoded content, mobile-focused
-- [x] **Basic Static Navbar** (5%) - Top navigation with UPSU logo and icon placeholders
-- [x] **Basic Footer** (4%) - Simple footer placeholder on homepage and product pages
+- [x] **Static Navbar** (5%) - Reusable navbar component with navigation menu and functional routing
+- [x] **About Us Page** (5%) - Complete page with UPSU information, services, and contact details
+- [x] **Footer** (4%) - Responsive footer with links, contact info, and social media placeholders
+- [x] **Collections Page** (5%) - Overview page showing product collections with grid layout
+- [x] **Collection Detail Page** (5%) - Individual collection pages with products, filters, and dropdowns (static)
 - [x] **Basic Product Page** (4%) - Single product display with static content
+- [x] **Sale Collection** (4%) - Dedicated sale page with discounted products and promotional messaging
+- [x] **Authentication UI** (3%) - Complete login and signup forms with validation (UI only)
 
 ### Testing Infrastructure
 - [x] **Widget Tests Setup** - Fixed test files to match current implementation
@@ -23,24 +28,24 @@ This is a Flutter e-commerce application recreating the University of Portsmouth
 
 ### Development Setup
 - [x] **Project Structure** - Clean Flutter project with proper file organization
+- [x] **Component Architecture** - Reusable NavBar and Footer components
+- [x] **Routing System** - Complete navigation between all basic pages
 - [x] **Development Documentation** - This README_DEV.md for tracking progress
 
 ## 🚧 In Progress
 
-Currently working on implementing remaining basic features to establish a solid foundation.
+Currently working on intermediate features to build dynamic functionality.
 
 ## 📋 Next Steps (Priority Order)
 
-### Basic Features (Remaining)
-- [ ] **Enhanced Navbar** - Functional navigation menu with proper routing
-- [ ] **About Us Page** - Static page with company information
-- [ ] **Collections Page** - Overview page showing product collections
-- [ ] **Collection Detail Page** - Individual collection with products and filters (static)
-- [ ] **Sale Collection Page** - Discounted products with promotional messaging
-- [ ] **Authentication UI** - Login/signup forms (UI only, no backend yet)
-- [ ] **Enhanced Footer** - Complete footer with proper links and information
-
 ### Intermediate Features (35% of functionality marks)
+- [ ] **Full Navigation System** (3%) - Complete routing between all pages (mostly done, needs collection detail routing)
+- [ ] **Dynamic Collections** (6%) - Data-driven collections with sorting/filtering
+- [ ] **Dynamic Collection Pages** (6%) - Product listings with functional widgets
+- [ ] **Functional Product Pages** (6%) - Interactive dropdowns, counters, etc.
+- [ ] **Shopping Cart** (6%) - Add to cart, view cart, basic functionality
+- [ ] **Print Shack** (3%) - Text personalization with dynamic form updates
+- [ ] **Responsiveness** (5%) - Desktop adaptation and responsive design
 - [ ] **Full Navigation System** (3%) - Complete routing between all pages
 - [ ] **Dynamic Collections** (6%) - Data-driven collections with sorting/filtering
 - [ ] **Dynamic Collection Pages** (6%) - Product listings with functional widgets
@@ -118,11 +123,11 @@ lib/
 
 ## 📊 Progress Tracking
 
-**Overall Completion: ~15%**
-- Basic Features: 4/9 completed (~18%)
+**Overall Completion: ~45%**
+- Basic Features: 9/9 completed (100%) ✅
 - Intermediate Features: 0/6 completed (0%)
 - Advanced Features: 0/3 completed (0%)
-- Software Practices: 2/4 completed (50%)
+- Software Practices: 3/4 completed (75%)
 
 ## 🔄 Development Workflow
 

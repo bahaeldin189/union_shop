@@ -4,6 +4,10 @@ import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
 import 'package:union_shop/pages/about_us_page.dart';
 import 'package:union_shop/pages/collections_page.dart';
+import 'package:union_shop/pages/collection_detail_page.dart';
+import 'package:union_shop/pages/sale_collection_page.dart';
+import 'package:union_shop/pages/login_page.dart';
+import 'package:union_shop/pages/signup_page.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -28,21 +32,14 @@ class UnionShopApp extends StatelessWidget {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutUsPage(),
         '/collections': (context) => const CollectionsPage(),
-        '/login': (context) => const Scaffold(
-              body: Center(
-                child: Text('Login Page - Coming Soon'),
-              ),
-            ),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
         '/cart': (context) => const Scaffold(
               body: Center(
                 child: Text('Shopping Cart - Coming Soon'),
               ),
             ),
-        '/sale': (context) => const Scaffold(
-              body: Center(
-                child: Text('Sale Items - Coming Soon'),
-              ),
-            ),
+        '/sale': (context) => const SaleCollectionPage(),
       },
     );
   }
