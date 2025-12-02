@@ -79,10 +79,8 @@ class NavBar extends StatelessWidget {
                       },
                     ),
                   ),
-                  const Spacer(),
-                  // Navigation icons
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
+                  // Navigation icons with responsive handling
+                  Flexible(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
