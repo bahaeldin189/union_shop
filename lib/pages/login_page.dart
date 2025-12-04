@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
 
@@ -23,15 +25,60 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _login() {
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      // Placeholder for login functionality
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login functionality coming soon!'),
-          backgroundColor: Color(0xFF4d2963),
-        ),
+      final authService = Provider.of<AuthService>(context, listen: false);
+
+      final success = await authService.signInWithEmailAndPassword(
+        _emailController.text.trim(),
+        _passwordController.text,
       );
+
+      if (mounted) {
+        if (success) {
+          Navigator.pushReplacementNamed(context, '/');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Welcome back!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(authService.errorMessage ?? 'Login failed'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    final success = await authService.signInWithGoogle();
+
+    if (mounted) {
+      if (success) {
+        Navigator.pushReplacementNamed(context, '/');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Welcome!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        if (authService.errorMessage != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(authService.errorMessage!),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -244,28 +291,37 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(height: 24),
 
                                 // Social login buttons
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: OutlinedButton.icon(
-                                    onPressed: () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                              'Google sign-in coming soon!'),
+                                Consumer<AuthService>(
+                                  builder: (context, authService, _) {
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height: 50,
+                                      child: OutlinedButton.icon(
+                                        onPressed: authService.isLoading
+                                            ? null
+                                            : _signInWithGoogle,
+                                        icon: authService.isLoading
+                                            ? const SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                ),
+                                              )
+                                            : const Icon(Icons.g_mobiledata,
+                                                size: 24),
+                                        label:
+                                            const Text('Continue with Google'),
+                                        style: OutlinedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
                                         ),
-                                      );
-                                    },
-                                    icon: const Icon(Icons.g_mobiledata,
-                                        size: 24),
-                                    label: const Text('Continue with Google'),
-                                    style: OutlinedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 32),
 

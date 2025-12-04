@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
 
@@ -31,7 +33,7 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  void _signup() {
+  Future<void> _signup() async {
     if (_formKey.currentState!.validate()) {
       if (!_acceptTerms) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -43,13 +45,35 @@ class _SignupPageState extends State<SignupPage> {
         return;
       }
 
-      // Placeholder for signup functionality
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Account creation functionality coming soon!'),
-          backgroundColor: Color(0xFF4d2963),
-        ),
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final fullName =
+          '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}';
+
+      final success = await authService.signUpWithEmailAndPassword(
+        _emailController.text.trim(),
+        _passwordController.text,
+        fullName,
       );
+
+      if (mounted) {
+        if (success) {
+          Navigator.pushReplacementNamed(context, '/');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Account created successfully!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content:
+                  Text(authService.errorMessage ?? 'Failed to create account'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -314,26 +338,44 @@ class _SignupPageState extends State<SignupPage> {
                                 const SizedBox(height: 24),
 
                                 // Signup button
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    onPressed: _signup,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF4d2963),
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                Consumer<AuthService>(
+                                  builder: (context, authService, _) {
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: authService.isLoading
+                                            ? null
+                                            : _signup,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xFF4d2963),
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: authService.isLoading
+                                            ? const SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                  strokeWidth: 2,
+                                                ),
+                                              )
+                                            : const Text(
+                                                'Create Account',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
                                       ),
-                                    ),
-                                    child: const Text(
-                                      'Create Account',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 32),
 

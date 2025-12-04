@@ -10,6 +10,13 @@
 .svn/
 migrate_working_dir/
 
+# Environment variables - Keep actual credentials secret
+.env
+.env.local
+.env.*.local
+# But allow .env.example to be committed
+!.env.example
+
 # IntelliJ related
 *.iml
 *.ipr

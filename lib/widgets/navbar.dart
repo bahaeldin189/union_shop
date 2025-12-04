@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/cart_provider.dart';
+import '../services/auth_service.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -173,18 +174,32 @@ class _NavBarState extends State<NavBar> {
                           onPressed: _toggleSearch,
                         ),
                       // Account/Login icon
-                      IconButton(
-                        icon: const Icon(
-                          Icons.person_outline,
-                          size: 18,
-                          color: Colors.grey,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        constraints: const BoxConstraints(
-                          minWidth: 32,
-                          minHeight: 32,
-                        ),
-                        onPressed: () => navigateToLogin(context),
+                      Consumer<AuthService>(
+                        builder: (context, authService, child) {
+                          return IconButton(
+                            icon: Icon(
+                              authService.isAuthenticated
+                                  ? Icons.person
+                                  : Icons.person_outline,
+                              size: 18,
+                              color: authService.isAuthenticated
+                                  ? const Color(0xFF4d2963)
+                                  : Colors.grey,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            constraints: const BoxConstraints(
+                              minWidth: 32,
+                              minHeight: 32,
+                            ),
+                            onPressed: () {
+                              if (authService.isAuthenticated) {
+                                Navigator.pushNamed(context, '/account');
+                              } else {
+                                navigateToLogin(context);
+                              }
+                            },
+                          );
+                        },
                       ),
                       // Cart icon with badge
                       Consumer<CartProvider>(

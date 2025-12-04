@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/widgets/navbar.dart';
 import 'package:union_shop/widgets/footer.dart';
@@ -11,11 +13,19 @@ import 'package:union_shop/pages/login_page.dart';
 import 'package:union_shop/pages/signup_page.dart';
 import 'package:union_shop/pages/cart_page.dart';
 import 'package:union_shop/pages/search_page.dart';
+import 'package:union_shop/pages/account_page.dart';
 import 'package:union_shop/services/cart_provider.dart';
+import 'package:union_shop/services/auth_service.dart';
 import 'package:union_shop/services/product_service.dart';
 import 'package:union_shop/models/product.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const UnionShopApp());
 }
 
@@ -24,8 +34,11 @@ class UnionShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CartProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => AuthService()),
+      ],
       child: MaterialApp(
         title: 'Union Shop',
         debugShowCheckedModeBanner: false,
@@ -49,6 +62,9 @@ class UnionShopApp extends StatelessWidget {
                   builder: (context) => const CollectionsPage());
             case '/login':
               return MaterialPageRoute(builder: (context) => const LoginPage());
+            case '/account':
+              return MaterialPageRoute(
+                  builder: (context) => const AccountPage());
             case '/signup':
               return MaterialPageRoute(
                   builder: (context) => const SignupPage());
