@@ -91,9 +91,6 @@ The application is designed primarily for web and mobile view, featuring a compl
 | **External Services** | ✅ | 6% | Firebase Auth + Firebase Core integration |
 
 **Software Development Total: 25/25 (100%)** ✅
-
-### **OVERALL ESTIMATED SCORE: 90/100 (27/30) + 25/25 = 52/55 (94.5%)**
-
 ---
 
 ## 📁 Project Structure
